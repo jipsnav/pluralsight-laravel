@@ -7,12 +7,16 @@
   <div class="post-content">
     <h1>{{ $post->title }}</h1>
     <p>{{ $post->description }}</p>
-    <a href="{{ route('posts.edit', $post)}}">Edit post</a>
-    <form action="{{ route('posts.destroy', $post) }}" method="post">
-      @csrf
-      @method('DELETE')
-      <button class="delete" type="submit">Delete</button>
-    </form>
+    @can('update', $post)
+      <a href="{{ route('posts.edit', $post)}}">Edit post</a>
+    @endcan
+    @can('delete', $post)
+      <form action="{{ route('posts.destroy', $post) }}" method="post">
+        @csrf
+        @method('DELETE')
+        <button class="delete" type="submit">Delete</button>
+      </form>
+    @endcan
   </div>
 </div>
 @endsection

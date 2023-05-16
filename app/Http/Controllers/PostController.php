@@ -15,7 +15,7 @@ class PostController extends Controller
 
   public function store(PostRequest $request) {
     $validated = $request->validated();
-    $post = Posts::create($validated);
+    $post = $request->user()->posts()->create($validated);
 
     return redirect()
       ->route('posts.show', $post)
@@ -28,10 +28,12 @@ class PostController extends Controller
   }
 
   public function edit(Posts $post) {
+    $this->authorize('update', $post);
     return view('posts.edit', compact('post'));
   }
 
   public function update(PostRequest $request, Posts $post) {
+    $this->authorize('update', $post);
     $validated = $request->validated();
     $post->update($validated);
 
@@ -41,7 +43,7 @@ class PostController extends Controller
   }
 
   public function destroy(Posts $post) {
-    // delete data
+    $this->authorize('delete', $post);
     $post->delete();
     // redirect to create page with success message
     return redirect()
