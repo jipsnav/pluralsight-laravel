@@ -9,16 +9,26 @@
 </head>
 <body class="antialiased">
   <ul class="nav">
-    
     <li><a @if (request()->routeIs('pages.home'))
       @class(['active'])
-    @endif href="{{ route('pages.home') }}">Home</a></li>
+    @endif href="{{ route('pages.home') }}">Dashboard</a></li>
     <li><a @if (request()->routeIs('pages.about'))
       @class(['active'])
     @endif href="{{ route('pages.about') }}">About</a></li>
-    <li><a @if (request()->routeIs('posts.create'))
-      @class(['active'])
-    @endif href="{{ route('posts.create') }}">Create</a></li>
+    @auth
+      <li><a @if (request()->routeIs('posts.create'))
+        @class(['active'])
+      @endif href="{{ route('posts.create') }}">Create</a></li>
+      <li><a href="{{ route('logout') }}">Logout</a></li>
+      <li class="username"><p>Logged in as <b>{{ Auth::user()->name }}</b></p></li>
+    @else
+      <li><a @if (request()->routeIs('register'))
+        @class(['active'])
+      @endif href="{{ route('register') }}">Register</a></li>
+      <li><a @if (request()->routeIs('login'))
+        @class(['active'])
+      @endif href="{{ route('login') }}">Login</a></li>
+    @endauth
   </ul>
 
   @includeWhen($errors->any(),'templates._errors')
